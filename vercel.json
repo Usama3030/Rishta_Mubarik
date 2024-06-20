@@ -1,10 +1,7 @@
 {
-  "build": {
-    "env": {
-      "NODE_ENV": "production"
+  "functions": {
+    "api/**/*.js": {
+      "runtime": "nodejs16.20.2"
     }
-  },
-  "engines": {
-    "node": "18.x"
   }
 }
