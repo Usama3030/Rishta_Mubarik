@@ -125,7 +125,7 @@
 
 // export default Authors;
 
-// Authors.js
+
 import {
   Table,
   Tbody,
