@@ -1,0 +1,7 @@
+icons -> icon -> sidebarIcon -> RishtaMobarikLogo
+
+user tables -> users filder index.js -> author.js component isnide user -> component folder inside src tables filder table tableRow.js
+
+dahboard mian admin configurator ->portal, fixed pplugin ko comment kar diya
+
+auth or admin main ja k footer bi comment kar diye
