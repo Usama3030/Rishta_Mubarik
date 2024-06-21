@@ -75,8 +75,5 @@
       "not dead",
       "not OperaMini all"
     ]
-  },
-  "engines": {
-    "node": ">=10 <=14"
   }
 }
