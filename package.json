@@ -75,5 +75,8 @@
       "not dead",
       "not OperaMini all"
     ]
+  },
+  "engines": {
+    "node": "16.20.2"
   }
 }
