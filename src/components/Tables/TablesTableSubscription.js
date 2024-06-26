@@ -180,9 +180,9 @@ const TablesTableRow = ({
           <Button colorScheme="teal" size="sm" mr={2} onClick={onOpen}>
             Edit
           </Button>
-          <Button colorScheme="gray" size="sm" variant="outline">
+          {/* <Button colorScheme="gray" size="sm" variant="outline">
             Pay
-          </Button>
+          </Button> */}
         </Flex>
       </Td>
 

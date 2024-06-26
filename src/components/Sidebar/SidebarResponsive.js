@@ -18,6 +18,8 @@ import {
 } from "@chakra-ui/react";
 import IconBox from "components/Icons/IconBox";
 import { CreativeTimLogo } from "components/Icons/Icons";
+import { RishtaMobarikIcon } from "components/Icons/Icons";
+import { RishtaMobarikLogo } from "components/Icons/Icons";
 import { Separator } from "components/Separator/Separator";
 // import { SidebarHelp } from "components/Sidebar/SidebarHelp";
 import React from "react";
@@ -201,7 +203,14 @@ function SidebarResponsive(props) {
         alignItems="center"
         fontSize="11px"
       >
-        <CreativeTimLogo w="32px" h="32px" me="10px" />
+        {/* <CreativeTimLogo w="32px" h="32px" me="10px" /> */}
+        <RishtaMobarikIcon
+          w="28px"
+          h="28px"
+          me="10px"
+          b
+          style={{ borderRadius: "50%" }}
+        />
         <Text fontSize="sm" mt="3px">
           {logoText}
         </Text>

@@ -56,13 +56,14 @@
 
 import { Flex } from "@chakra-ui/react";
 import Authors from "./components/Authors";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
+import { SearchContext } from "context/SearchContext";
 
-function Subscription() {
+function Community() {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(""); // Step 1
+  const { searchQuery } = useContext(SearchContext);
   const history = useHistory();
 
   useEffect(() => {
@@ -70,30 +71,28 @@ function Subscription() {
     if (!token) {
       history.push("/auth/signin");
     } else {
-      fetchUsers(token, searchQuery); // Step 3
+      fetchUsers(token);
     }
-  }, [history, searchQuery]);
+  }, [history]);
 
-  const fetchUsers = async (token, searchQuery = "") => {
-    // Step 2
-    setLoading(true);
+  const fetchUsers = async (token) => {
     try {
-      let url = "https://rishtamobarak.com/api/v1/transaction";
-      if (searchQuery) {
-        url += `?email=${searchQuery}`;
-      }
-      const response = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        "https://rishtamobarak.com/api/v1/reported-contacts",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Response status:", response.status);
 
       if (!response.ok) {
         throw new Error("Failed to fetch users");
       }
-
       const result = await response.json();
       const data = result.data;
+      console.log("Users data:", data);
       setUsers(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -102,57 +101,63 @@ function Subscription() {
       setLoading(false);
     }
   };
-
-  const handleUpdate = async (id, updatedData) => {
-    try {
-      const token = localStorage.getItem("accessToken");
-      const response = await fetch(
-        `https://rishtamobarak.com/api/v1/transaction/${id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(updatedData),
+  const handleDelete = async (id) => {
+    if (
+      window.confirm(`Are you sure you want to delete the user with id: ${id}?`)
+    ) {
+      try {
+        const token = localStorage.getItem("accessToken");
+        console.log("Token:", token); // Log the token for debugging
+        const response = await fetch(
+          `https://rishtamobarak.com/api/v1/reported-contacts/un-report/`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              reportedUserId: id,
+            }),
+          }
+        );
+        console.log("Response status:", response.status);
+        const responseBody = await response.text();
+        console.log("Response body:", responseBody);
+        if (!response.ok) {
+          throw new Error(`Failed to delete user: ${responseBody}`);
         }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to update subscription");
+        setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+        alert(`User with id: ${id} has been deleted`);
+      } catch (error) {
+        console.error("Error deleting user:", error);
+        alert(`Error deleting user: ${error.message}`);
       }
-
-      const updatedSubscription = await response.json();
-
-      // Update the local state
-      setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user.id === id ? { ...user, ...updatedSubscription } : user
-        )
-      );
-    } catch (error) {
-      console.error("Error updating subscription:", error);
     }
   };
+
+  const filteredUsers = users.filter(
+    (user) =>
+      user.reportedContact.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.reportFrequency
+        .toString()
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
+  );
 
   return (
     <Flex direction="column" pt={{ base: "120px", md: "75px" }}>
       <Authors
-        title={"Subscriptions Table"}
-        captions={[
-          "Status",
-          "Email",
-          "Transaction Number",
-          "Transaction Date",
-          "Due Date",
-          "Subscription Type",
-          "Action",
-        ]}
-        data={users}
-        updateHandler={handleUpdate}
+        title={"Community Table"}
+        captions={["Reported Contact", "Reported Frequency", "Action"]}
+        // data={users}
+        data={filteredUsers}
+        deleteUser={handleDelete}
+        loading={loading}
       />
     </Flex>
   );
 }
 
-export default Subscription;
+export default Community;

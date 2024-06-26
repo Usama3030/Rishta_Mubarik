@@ -18,6 +18,9 @@ import theme from "theme/theme.js";
 import MainPanel from "../components/Layout/MainPanel";
 import PanelContainer from "../components/Layout/PanelContainer";
 import PanelContent from "../components/Layout/PanelContent";
+import { AuthProvider } from "context/AuthContext";
+import { SearchProvider } from "context/SearchContext";
+
 export default function Dashboard(props) {
   const { ...rest } = props;
   // states and functions
@@ -97,48 +100,50 @@ export default function Dashboard(props) {
   // Chakra Color Mode
   return (
     <ChakraProvider theme={theme} resetCss={false}>
-      <Sidebar
-        routes={routes}
-        logoText={"PURITY UI DASHBOARD"}
-        display="none"
-        sidebarVariant={sidebarVariant}
-        {...rest}
-      />
-      <MainPanel
-        w={{
-          base: "100%",
-          xl: "calc(100% - 275px)",
-        }}
-      >
-        <Portal>
-          <AdminNavbar
-            onOpen={onOpen}
-            logoText={"PURITY UI DASHBOARD"}
-            brandText={getActiveRoute(routes)}
-            secondary={getActiveNavbar(routes)}
-            fixed={fixed}
+      <AuthProvider>
+        <SearchProvider>
+          <Sidebar
+            routes={routes}
+            logoText={"RISHTA MOBARIK"}
+            display="none"
+            sidebarVariant={sidebarVariant}
             {...rest}
           />
-        </Portal>
-        {getRoute() ? (
-          <PanelContent>
-            <PanelContainer>
-              <Switch>
-                {getRoutes(routes)}
-                <Redirect from="/admin" to="/admin/dashboard" />
-              </Switch>
-            </PanelContainer>
-          </PanelContent>
-        ) : null}
-        {/* <Footer /> */}
-        {/* <Portal>
+          <MainPanel
+            w={{
+              base: "100%",
+              xl: "calc(100% - 275px)",
+            }}
+          >
+            <Portal>
+              <AdminNavbar
+                onOpen={onOpen}
+                logoText={"RISHTA MOBARIK"}
+                brandText={getActiveRoute(routes)}
+                secondary={getActiveNavbar(routes)}
+                fixed={fixed}
+                {...rest}
+              />
+            </Portal>
+            {getRoute() ? (
+              <PanelContent>
+                <PanelContainer>
+                  <Switch>
+                    {getRoutes(routes)}
+                    <Redirect from="/admin" to="/admin/dashboard" />
+                  </Switch>
+                </PanelContainer>
+              </PanelContent>
+            ) : null}
+            {/* <Footer /> */}
+            {/* <Portal>
           <FixedPlugin
             secondary={getActiveNavbar(routes)}
             fixed={fixed}
             onOpen={onOpen}
           />
         </Portal> */}
-        {/* <Configurator
+            {/* <Configurator
 					secondary={getActiveNavbar(routes)}
 					isOpen={isOpen}
 					onClose={onClose}
@@ -149,7 +154,9 @@ export default function Dashboard(props) {
 					onOpaque={() => setSidebarVariant('opaque')}
 					onTransparent={() => setSidebarVariant('transparent')}
 				/> */}
-      </MainPanel>
+          </MainPanel>
+        </SearchProvider>
+      </AuthProvider>
     </ChakraProvider>
   );
 }

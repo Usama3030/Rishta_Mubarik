@@ -26,13 +26,17 @@ import { ProfileIcon } from "components/Icons/Icons";
 import { ItemContent } from "components/Menu/ItemContent";
 import SidebarResponsive from "components/Sidebar/SidebarResponsive";
 import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import routes from "routes.js";
-
+import { SearchContext } from "context/SearchContext";
+import { AuthContext } from "context/AuthContext";
 export default function HeaderLinks(props) {
   const { variant, children, fixed, secondary, onOpen, ...rest } = props;
   const [user, setUser] = useState(null);
+  // const [searchQuery, setSearchQuery] = useState("");
+  const { searchQuery, setSearchQuery } = useContext(SearchContext);
+  // const { isAuthenticated, logout } = useContext(AuthContext);
   const history = useHistory();
 
   useEffect(() => {
@@ -47,6 +51,16 @@ export default function HeaderLinks(props) {
     setUser(null);
     history.push("/auth/signin");
   };
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+    console.log("search in admin navbar", e.target.value);
+  };
+
+  // const handleLogout = () => {
+  //   logout();
+  //   setUser(null);
+  //   history.push("/auth/signin");
+  // };
 
   // Chakra Color Mode
   let mainTeal = useColorModeValue("teal.300", "teal.300");
@@ -107,6 +121,8 @@ export default function HeaderLinks(props) {
           color={mainText}
           placeholder="Type here..."
           borderRadius="inherit"
+          value={searchQuery}
+          onChange={handleSearch}
         />
       </InputGroup>
       {/* <NavLink to="/auth/signin">

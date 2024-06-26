@@ -192,7 +192,13 @@ const SidebarContent = ({ logoText, routes }) => {
           fontSize="11px"
         >
           {/* <CreativeTimLogo w="32px" h="32px" me="10px" /> */}
-          <RishtaMobarikIcon w="28px" h="28px" me="10px" />
+          <RishtaMobarikIcon
+            w="28px"
+            h="28px"
+            me="10px"
+            b
+            style={{ borderRadius: "50%" }}
+          />
           <Text fontSize="sm" mt="3px">
             {logoText}
           </Text>

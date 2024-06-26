@@ -116,7 +116,14 @@ import {
   Box,
   useColorModeValue,
   Switch,
+  Select,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Button as ChakraButton,
 } from "@chakra-ui/react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import React from "react";
 
 function TablesTableRow(props) {
@@ -136,8 +143,14 @@ function TablesTableRow(props) {
   const bgStatus = useColorModeValue("gray.400", "#1a202c");
   const colorStatus = useColorModeValue("white", "gray.400");
 
-  const handleToggleVerification = () => {
-    toggleVerification(id);
+  // const handleToggleVerification = () => {
+  //   toggleVerification(id);
+  // };
+  // const handleToggleVerification = (e) => {
+  //   toggleVerification(id, e.target.value);
+  // };
+  const handleToggleVerification = (value) => {
+    toggleVerification(id, value);
   };
 
   const handleDeleteUser = () => {
@@ -176,16 +189,66 @@ function TablesTableRow(props) {
           {active ? "Active" : "Inactive"}
         </Badge>
       </Td>
-      <Td>
+      {/* <Td>
         <Text fontSize="md" color={textColor} fontWeight="bold">
           {verification}
         </Text>
-
-        {/* <Switch
+        </Td> */}
+      {/* <Switch
           isChecked={verification}
           onChange={() => toggleVerification(id)}
           colorScheme="teal"
         /> */}
+      {/* <Td>
+        <Select
+          placeholder={verification}
+          onChange={handleToggleVerification}
+          color={textColor}
+          fontSize="xs"
+          width="100%"
+          borderRadius="md"
+          bg="gray.200"
+          borderColor="gray.300"
+          _hover={{ borderColor: "gray.600" }}
+          _focus={{ borderColor: "gray.600" }}
+        >
+          <option value="pending" fontSize="xs">
+            Pending
+          </option>
+          <option value="unverified">Unverified</option>
+          <option value="verified">Verified</option>
+        </Select>
+      </Td> */}
+      <Td>
+        <Menu>
+          <MenuButton
+            as={ChakraButton}
+            variant="outline"
+            background="gray.200"
+            size="sm"
+            border="none"
+          >
+            <Flex
+              alignItems="center"
+              justifyContent="space-between"
+              width="100%"
+            >
+              <Text>{verification}</Text>
+              <ChevronDownIcon />
+            </Flex>
+          </MenuButton>
+          <MenuList>
+            <MenuItem onClick={() => handleToggleVerification("pending")}>
+              Pending
+            </MenuItem>
+            <MenuItem onClick={() => handleToggleVerification("unverified")}>
+              Unverified
+            </MenuItem>
+            <MenuItem onClick={() => handleToggleVerification("verified")}>
+              Verified
+            </MenuItem>
+          </MenuList>
+        </Menu>
       </Td>
       <Td>
         <Text

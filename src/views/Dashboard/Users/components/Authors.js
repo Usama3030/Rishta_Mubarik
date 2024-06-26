@@ -125,7 +125,6 @@
 
 // export default Authors;
 
-
 import {
   Table,
   Tbody,
@@ -133,6 +132,8 @@ import {
   Th,
   Thead,
   Tr,
+  Td,
+  Flex,
   useColorModeValue,
 } from "@chakra-ui/react";
 // Custom components
@@ -143,7 +144,14 @@ import CustomSpinner from "components/Spinner/Spinner";
 import TablesTableRow from "components/Tables/TablesTableRow";
 import React from "react";
 
-const Authors = ({ title, captions, data, toggleVerification, deleteUser }) => {
+const Authors = ({
+  title,
+  captions,
+  data,
+  toggleVerification,
+  deleteUser,
+  loading,
+}) => {
   const textColor = useColorModeValue("gray.700", "white");
 
   return (
@@ -154,23 +162,92 @@ const Authors = ({ title, captions, data, toggleVerification, deleteUser }) => {
         </Text>
       </CardHeader>
       <CardBody>
-        {data.length === 0 ? (
-          <CustomSpinner />
-        ) : (
-          <Table variant="simple" color={textColor}>
-            <Thead>
-              <Tr my=".8rem" pl="0px" color="gray.400">
-                {captions.map((caption, idx) => (
-                  <Th color="gray.400" key={idx} ps={idx === 0 ? "0px" : null}>
-                    {caption}
-                  </Th>
-                ))}
+        <Table variant="simple" color={textColor}>
+          <Thead>
+            <Tr my=".8rem" pl="0px" color="gray.400">
+              {captions.map((caption, idx) => (
+                <Th color="gray.400" key={idx} ps={idx === 0 ? "0px" : null}>
+                  {caption}
+                </Th>
+              ))}
+            </Tr>
+          </Thead>
+          {/* <Tbody>
+            {data.map((row) => (
+              <TablesTableRow
+                // key={`${row.email}-${row.name}`}
+                key={row.id}
+                id={row.id}
+                name={row.name}
+                logo={row.frontCNICPath}
+                email={row.email}
+                active={row.active}
+                verification={row.verified}
+                subscription={row.subscription}
+                date={new Date(row.createdAt).toLocaleDateString()}
+                toggleVerification={toggleVerification}
+                deleteUser={deleteUser}
+              />
+            ))}
+          </Tbody> */}
+          {/* <Tbody>
+            {loading ? (
+              <Tr>
+                <Td colSpan={captions.length}>
+                  <Flex justify="center">
+                    <CustomSpinner />
+                  </Flex>
+                </Td>
               </Tr>
-            </Thead>
-            <Tbody>
-              {data.map((row) => (
+            ) : data.length === 0 ? (
+              <Tr>
+                <Td colSpan={captions.length}>
+                  <Flex justify="center">
+                    <Text color="gray.500">No records found</Text>
+                  </Flex>
+                </Td>
+              </Tr>
+            ) : (
+              data.map((row) => (
                 <TablesTableRow
-                  // key={`${row.email}-${row.name}`}
+                  key={row.id}
+                  id={row.id}
+                  name={row.name}
+                  logo={row.frontCNICPath}
+                  email={row.email}
+                  active={row.active}
+                  verification={row.verified}
+                  subscription={row.subscription}
+                  date={new Date(row.createdAt).toLocaleDateString()}
+                  toggleVerification={toggleVerification}
+                  deleteUser={deleteUser}
+                />
+              ))
+            )}
+          </Tbody> */}
+          <Tbody>
+            {loading && (
+              <Tr>
+                <Td colSpan={captions.length}>
+                  <Flex justify="center" margin="40px">
+                    <CustomSpinner />
+                  </Flex>
+                </Td>
+              </Tr>
+            )}
+            {!loading && data.length === 0 && (
+              <Tr>
+                <Td colSpan={captions.length}>
+                  <Flex justify="center">
+                    <Text color="gray.500">No records found</Text>
+                  </Flex>
+                </Td>
+              </Tr>
+            )}
+            {!loading &&
+              data.length > 0 &&
+              data.map((row) => (
+                <TablesTableRow
                   key={row.id}
                   id={row.id}
                   name={row.name}
@@ -184,9 +261,8 @@ const Authors = ({ title, captions, data, toggleVerification, deleteUser }) => {
                   deleteUser={deleteUser}
                 />
               ))}
-            </Tbody>
-          </Table>
-        )}
+          </Tbody>
+        </Table>
       </CardBody>
     </Card>
   );

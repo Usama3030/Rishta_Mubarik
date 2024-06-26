@@ -84,6 +84,7 @@ import {
   Tr,
   Th,
   Td,
+  Flex,
   Text,
   useColorModeValue,
   Box,
@@ -95,7 +96,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import TablesTableRow from "components/Tables/TablesTableSubscription";
 import CustomSpinner from "components/Spinner/Spinner";
 
-const Authors = ({ title, captions, data, updateHandler }) => {
+const Authors = ({ title, captions, data, updateHandler, loading }) => {
   const textColor = useColorModeValue("gray.700", "white");
 
   function formatDueDate(dateString) {
@@ -115,23 +116,38 @@ const Authors = ({ title, captions, data, updateHandler }) => {
         </Text>
       </CardHeader>
       <CardBody>
-        {data.length === 0 ? (
-          <Box textAlign="center">
-            <CustomSpinner />
-          </Box>
-        ) : (
-          <Table variant="simple">
-            <Thead>
+        <Table variant="simple">
+          <Thead>
+            <Tr>
+              {captions.map((caption, idx) => (
+                <Th key={idx} color="gray.400" textAlign="center">
+                  {caption}
+                </Th>
+              ))}
+            </Tr>
+          </Thead>
+          <Tbody>
+            {loading && (
               <Tr>
-                {captions.map((caption, idx) => (
-                  <Th key={idx} color="gray.400" textAlign="center">
-                    {caption}
-                  </Th>
-                ))}
+                <Td colSpan={captions.length}>
+                  <Flex justify="center" margin="40px">
+                    <CustomSpinner />
+                  </Flex>
+                </Td>
               </Tr>
-            </Thead>
-            <Tbody>
-              {data.map((row) => {
+            )}
+            {!loading && data.length === 0 && (
+              <Tr>
+                <Td colSpan={captions.length}>
+                  <Flex justify="center">
+                    <Text color="gray.500">No records found</Text>
+                  </Flex>
+                </Td>
+              </Tr>
+            )}
+            {!loading &&
+              data.length > 0 &&
+              data.map((row) => {
                 return (
                   <TablesTableRow
                     key={row.id}
@@ -146,9 +162,8 @@ const Authors = ({ title, captions, data, updateHandler }) => {
                   />
                 );
               })}
-            </Tbody>
-          </Table>
-        )}
+          </Tbody>
+        </Table>
       </CardBody>
     </Card>
   );
